@@ -13,7 +13,7 @@ A React application that allows users to browse a list of dog breeds and view ra
 - **User Authentication**: Secure login using DummyJSON API
 - **Caching**: Local cache mechanism to reduce API calls
 - **Rate Limit Handling**: Retry logic with exponential backoff for API rate limiting
-- **Unit Tests**: Test coverage for components and services
+- **Unit Tests**: Test coverage for components.
 
 ## Installation
 
