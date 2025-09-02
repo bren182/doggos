@@ -4,6 +4,7 @@ import BreedList from './components/BreedList'
 import ImageDisplay from './components/ImageDisplay'
 import Login from './components/Login'
 import UserProfile from './components/UserProfile'
+import RandomBreed from './components/RandomBreed'
 import { fetchBreeds, fetchRandomImages } from './services/api'
 import { isAuthenticated, getCurrentUser } from './services/auth'
 
@@ -20,6 +21,7 @@ function App() {
   const [isLoadingImages, setIsLoadingImages] = useState(false);
   const [breedsError, setBreedsError] = useState(null);
   const [imagesError, setImagesError] = useState(null);
+  const [activeTab, setActiveTab] = useState('breedList');
 
   // Fetch all breeds when logged in
   useEffect(() => {
@@ -92,24 +94,49 @@ function App() {
         {currentUser && <UserProfile user={currentUser} onLogout={handleLogout} />}
       </header>
       
+      <div className="app-tabs">
+        <button 
+          className={`tab-button ${activeTab === 'breedList' ? 'active' : ''}`}
+          onClick={() => setActiveTab('breedList')}
+        >
+          Breed List
+        </button>
+        <button 
+          className={`tab-button ${activeTab === 'randomBreed' ? 'active' : ''}`}
+          onClick={() => setActiveTab('randomBreed')}
+        >
+          Random Breed
+        </button>
+      </div>
+      
       <main className="app-content">
-        <div className="breeds-section">
-          <BreedList 
-            breeds={breeds} 
-            isLoading={isLoadingBreeds} 
-            error={breedsError} 
-            onBreedSelect={handleBreedSelect} 
-          />
-        </div>
+        {activeTab === 'breedList' && (
+          <>
+            <div className="breeds-section">
+              <BreedList 
+                breeds={breeds} 
+                isLoading={isLoadingBreeds} 
+                error={breedsError} 
+                onBreedSelect={handleBreedSelect} 
+              />
+            </div>
+            
+            <div className="images-section">
+              <ImageDisplay 
+                breedImages={breedImages} 
+                isLoading={isLoadingImages} 
+                error={imagesError} 
+                selectedBreed={selectedBreed} 
+              />
+            </div>
+          </>
+        )}
         
-        <div className="images-section">
-          <ImageDisplay 
-            breedImages={breedImages} 
-            isLoading={isLoadingImages} 
-            error={imagesError} 
-            selectedBreed={selectedBreed} 
-          />
-        </div>
+        {activeTab === 'randomBreed' && (
+          <div className="random-breed-section">
+            <RandomBreed />
+          </div>
+        )}
       </main>
       
       <footer className="app-footer">

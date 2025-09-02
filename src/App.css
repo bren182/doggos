@@ -42,7 +42,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  padding: 2rem;
+  padding: 1rem;
   flex: 1;
   max-width: 1200px;
   margin: 0 auto;
@@ -51,6 +51,10 @@ body {
 
 @media (min-width: 768px) {
   .app-content {
+    padding: 2rem;
+  }
+  
+  .app-content:not(.random-breed-active) {
     flex-direction: row;
   }
 }
@@ -126,7 +130,7 @@ body {
 
 .image-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1rem;
 }
 
@@ -135,10 +139,11 @@ body {
   overflow: hidden;
   box-shadow: var(--shadow);
   transition: transform 0.3s;
+  aspect-ratio: 1 / 1;
 }
 
 .image-card:hover {
-  transform: scale(1.05);
+  transform: translateY(-5px);
 }
 
 .image-card img {
@@ -291,4 +296,168 @@ body {
 .logout-button:hover {
   background-color: white;
   color: var(--primary-color);
+}
+
+/* Tab Navigation Styles */
+.app-tabs {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  background-color: white;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.tab-button {
+  background: transparent;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  margin: 0 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  color: var(--secondary-color);
+}
+
+.tab-button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: transparent;
+  transition: all 0.2s ease;
+}
+
+.tab-button.active {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.tab-button.active::after {
+  background-color: var(--primary-color);
+}
+
+.tab-button:hover:not(.active) {
+  color: var(--primary-color);
+}
+
+/* RandomBreed Component Styles */
+.random-breed-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.random-breed-container h2 {
+  color: var(--secondary-color);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.random-breed-button {
+  display: block;
+  margin: 0 auto 2rem;
+  padding: 0.75rem 2rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.random-breed-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.random-breed-button:disabled {
+  background-color: #95a5a6;
+  cursor: wait;
+}
+
+.breed-display {
+  padding: 1rem;
+}
+
+.breed-name {
+  text-transform: capitalize;
+  font-size: 1.8rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--secondary-color);
+}
+
+.breed-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .breed-content {
+    flex-direction: row;
+  }
+}
+
+.breed-info {
+  flex: 1;
+}
+
+.breed-info h4 {
+  font-size: 1.3rem;
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+.info-card {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.info-item {
+  margin-bottom: 1rem;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+}
+
+.info-label {
+  font-weight: 600;
+  color: var(--secondary-color);
+  margin-right: 0.5rem;
+  display: block;
+}
+
+@media (min-width: 576px) {
+  .info-label {
+    display: inline;
+  }
+}
+
+.breed-images {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .breed-images {
+    grid-template-columns: repeat(1, 1fr);
+    max-width: 400px;
+  }
+}
+
+.random-breed-section {
+  width: 100%;
 }

@@ -2,6 +2,10 @@ import cacheManager from '../utils/cache';
 
 // API endpoints for Dog CEO API
 const BASE_URL = 'https://dog.ceo/api';
+const BREED_INFO_URL = 'https://api.api-ninjas.com/v1/dogs';
+
+// API Key for API Ninjas from environment variables
+const API_NINJAS_KEY = import.meta.env.VITE_API_NINJAS_KEY;
 
 /**
  * Function to handle retries for API requests
@@ -108,6 +112,87 @@ export const fetchRandomImages = async (breed, count = 3) => {
     return images;
   } catch (error) {
     console.error(`Error fetching images for ${breed}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch a random breed from the list of all breeds
+ */
+export const fetchRandomBreed = async () => {
+  try {
+    // Get all breeds first
+    const breeds = await fetchBreeds();
+    
+    // Select a random breed
+    const randomIndex = Math.floor(Math.random() * breeds.length);
+    return breeds[randomIndex];
+  } catch (error) {
+    console.error('Error fetching random breed:', error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch detailed information about a dog breed using API Ninjas
+ * @param {string} breedName - The name of the breed to fetch information about
+ * @returns {Promise<Object>} - Promise that resolves with breed information
+ */
+export const fetchBreedInfo = async (breedName) => {
+  const cacheKey = `breed_info_${breedName}`;
+  const cachedInfo = cacheManager.get(cacheKey);
+  
+  if (cachedInfo) {
+    console.log(`Using cached info for ${breedName}`);
+    return cachedInfo;
+  }
+  
+  try {
+    const fetchApi = async () => {
+      // Format breed name for the API (lowercase, handle special cases)
+      const formattedBreed = breedName
+        .toLowerCase()
+        .replace('shepherd', 'german shepherd') // Special case for German Shepherd
+        .replace('-', ' '); // Replace hyphens with spaces
+      
+      const response = await fetch(`${BREED_INFO_URL}?name=${formattedBreed}`, {
+        headers: {
+          'X-Api-Key': API_NINJAS_KEY,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // API Ninjas might return multiple matches, take the first one or return default info
+      return data.length > 0 ? data[0] : {
+        name: breedName,
+        min_height_male: 'Unknown',
+        max_height_male: 'Unknown',
+        min_weight_male: 'Unknown',
+        max_weight_male: 'Unknown',
+        min_life_expectancy: 'Unknown',
+        max_life_expectancy: 'Unknown',
+        temperament: 'Information not available',
+        energy: 3,
+        trainability: 3,
+        protectiveness: 3,
+        shedding: 3
+      };
+    };
+    
+    const breedInfo = await withRetry(fetchApi);
+    
+    // Cache the breed info for 1 day (86400000 ms)
+    cacheManager.set(cacheKey, breedInfo, 86400000);
+    
+    return breedInfo;
+  } catch (error) {
+    console.error(`Error fetching info for ${breedName}:`, error);
     throw error;
   }
 };
