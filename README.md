@@ -1,5 +1,6 @@
 # 🐕 Dog Breed Viewer
-![Collie](https://images.dog.ceo/breeds/collie-border/n02106166_7543.jpg)
+<img width="361" height="655" alt="image" src="https://github.com/user-attachments/assets/5e54789e-a954-4cd7-bda4-cfea234952d3" />
+
 A React application that allows users to browse a list of dog breeds and view random images for selected breeds using the Dog CEO API.
 
 ## Features
