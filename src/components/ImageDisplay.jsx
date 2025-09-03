@@ -15,7 +15,7 @@ function ImageDisplay({ breedImages, isLoading, error, selectedBreed }) {
 
   return (
     <div className="image-display">
-      <h2>{selectedBreed} Images</h2>
+      <h4>Images</h4>
       <div className="image-container">
         {breedImages && breedImages.length > 0 ? (
           breedImages.map((imageUrl, index) => (

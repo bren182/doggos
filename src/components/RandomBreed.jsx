@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { fetchRandomBreed, fetchRandomImages } from '../services/api';
+import { fetchRandomBreed, fetchRandomImages, fetchBreedInfo } from '../services/api';
+import BreedStats from './BreedStats';
+import './BreedStats.css';
 
 const RandomBreed = () => {
   const [breed, setBreed] = useState(null);
   const [breedImages, setBreedImages] = useState([]);
+  const [breedInfo, setBreedInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -13,21 +16,17 @@ const RandomBreed = () => {
       setIsLoading(true);
       setError(null);
       
-      // Get a random breed
-      const breeds = await fetch('https://dog.ceo/api/breeds/list/all')
-        .then(response => response.json())
-        .then(data => Object.keys(data.message));
-      
-      const randomIndex = Math.floor(Math.random() * breeds.length);
-      const randomBreed = breeds[randomIndex];
+      // Get a random breed using our API service
+      const randomBreed = await fetchRandomBreed();
       setBreed(randomBreed);
       
-      // Get 3 random images for this breed
-      const images = await fetch(`https://dog.ceo/api/breed/${randomBreed}/images/random/3`)
-        .then(response => response.json())
-        .then(data => data.message);
-      
+      // Get images for this breed
+      const images = await fetchRandomImages(randomBreed, 3);
       setBreedImages(images);
+      
+      // Get breed information from API
+      const info = await fetchBreedInfo(randomBreed);
+      setBreedInfo(info);
       
     } catch (err) {
       setError(err.message || 'Failed to fetch random breed');
@@ -37,45 +36,20 @@ const RandomBreed = () => {
     }
   };
 
-  // Display info about the breed from a custom list
-  const getBreedInfo = (breed) => {
-    // Simple breed information lookup
-    const breedInfo = {
-      affenpinscher: {
-        size: 'Small',
-        temperament: 'Confident, Curious, Stubborn',
-        lifespan: '12-14 years',
-        description: 'The Affenpinscher is a small but feisty dog with a wiry coat.'
-      },
-      beagle: {
-        size: 'Medium',
-        temperament: 'Curious, Merry, Friendly',
-        lifespan: '10-15 years',
-        description: 'The Beagle is a scent hound with an excellent sense of smell.'
-      },
-      corgi: {
-        size: 'Small',
-        temperament: 'Affectionate, Smart, Alert',
-        lifespan: '12-15 years',
-        description: 'Corgis are herding dogs known for their short legs and long bodies.'
-      },
-      husky: {
-        size: 'Medium to Large',
-        temperament: 'Outgoing, Friendly, Intelligent',
-        lifespan: '12-14 years',
-        description: 'Siberian Huskies are known for their endurance and wolf-like appearance.'
-      },
-    };
+  // Format breed information for display
+  const formatBreedInfo = (info) => {
+    if (!info) return {};
     
-    // Return generic info if specific breed not found
-    const defaultInfo = {
-      size: 'Varies',
-      temperament: 'Each breed has unique traits',
-      lifespan: '10-15 years on average',
-      description: 'Dogs are wonderful companions known for their loyalty and affection.'
+    return {
+      size: `${info.min_height_male || '?'} to ${info.max_height_male || '?'} inches`,
+      weight: `${info.min_weight_male || '?'} to ${info.max_weight_male || '?'} pounds`,
+      lifespan: `${info.min_life_expectancy || '?'} to ${info.max_life_expectancy || '?'} years`,
+      temperament: info.temperament || 'Information not available',
+      energy: `${info.energy || '?'}/5`,
+      trainability: `${info.trainability || '?'}/5`,
+      protectiveness: `${info.protectiveness || '?'}/5`,
+      shedding: `${info.shedding || '?'}/5`
     };
-    
-    return breedInfo[breed] || defaultInfo;
   };
 
   return (
@@ -99,14 +73,20 @@ const RandomBreed = () => {
           <div className="breed-content">
             <div className="breed-info">
               <h4>Breed Information</h4>
-              <div className="info-card">
-                {Object.entries(getBreedInfo(breed)).map(([key, value]) => (
-                  <div key={key} className="info-item">
-                    <span className="info-label">{key.charAt(0).toUpperCase() + key.slice(1)}:</span>
-                    <span className="info-value">{value}</span>
+              {breedInfo && (
+                <>
+                  <div className="info-card summary">
+                    {Object.entries(formatBreedInfo(breedInfo)).map(([key, value]) => (
+                      <div key={key} className="info-item">
+                        <span className="info-label">{key.charAt(0).toUpperCase() + key.slice(1)}:</span>
+                        <span className="info-value">{value}</span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
+                  
+                  <BreedStats breedInfo={breedInfo} />
+                </>
+              )}
             </div>
             
             <div className="breed-images">

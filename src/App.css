@@ -53,19 +53,51 @@ body {
   .app-content {
     padding: 2rem;
   }
+}
+
+@media (max-width: 576px) {
+  .breed-list-layout {
+    flex-direction: column;
+  }
   
-  .app-content:not(.random-breed-active) {
-    flex-direction: row;
+  .breeds-section {
+    width: 100%;
+    margin-bottom: 1rem;
   }
 }
 
 .breeds-section {
-  flex: 1;
-  min-width: 250px;
+  width: 220px;
+  min-width: 180px;
+  flex-shrink: 0;
 }
 
 .images-section {
-  flex: 2;
+  width: 100%;
+}
+
+.breed-list-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+.breed-detail-section {
+  flex: 1;
+  padding: 1.5rem;
+  background-color: white;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.breed-detail-section h2 {
+  color: var(--secondary-color);
+  margin-bottom: 1.5rem;
+  text-transform: capitalize;
 }
 
 .breed-list-container {
@@ -395,14 +427,14 @@ body {
 }
 
 .breed-content {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
 }
 
 @media (min-width: 768px) {
   .breed-content {
-    flex-direction: row;
+    grid-template-columns: 1fr 2fr;
   }
 }
 
@@ -458,6 +490,239 @@ body {
   }
 }
 
-.random-breed-section {
+.random-breed-section,
+.breed-game-section {
   width: 100%;
+}
+
+/* BreedGame Component Styles */
+.breed-game-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.breed-game-container h2 {
+  color: var(--secondary-color);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.game-intro {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.game-intro p {
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  color: var(--secondary-color);
+}
+
+.game-button {
+  display: block;
+  margin: 2rem auto;
+  padding: 0.75rem 2rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.game-button:hover {
+  background-color: #2980b9;
+  transform: translateY(-2px);
+}
+
+.last-played {
+  font-size: 0.9rem;
+  color: #777;
+  margin-top: 1rem;
+}
+
+.game-board {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.score-display {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+}
+
+.clues-section {
+  margin-bottom: 2rem;
+}
+
+.clues-section h3 {
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+.clue-list {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.clue-item {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: flex-start;
+}
+
+.clue-number {
+  background-color: var(--primary-color);
+  color: white;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.clue-text {
+  line-height: 1.5;
+}
+
+.clue-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--secondary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clue-button:hover {
+  background-color: #34495e;
+}
+
+.guess-form {
+  background-color: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.input-group label {
+  margin-bottom: 0.5rem;
+  color: var(--secondary-color);
+  font-weight: 600;
+}
+
+.input-group input {
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submit-button:hover {
+  background-color: #2980b9;
+}
+
+.feedback-message {
+  padding: 1rem;
+  border-radius: 4px;
+  background-color: rgba(52, 152, 219, 0.1);
+  border-left: 4px solid var(--primary-color);
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+}
+
+.game-result {
+  text-align: center;
+}
+
+.game-result h3 {
+  color: var(--secondary-color);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.breed-reveal {
+  margin: 2rem auto;
+  max-width: 600px;
+}
+
+.breed-image {
+  margin: 1rem auto;
+  max-width: 300px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.breed-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.breed-details {
+  margin: 2rem auto;
+  max-width: 400px;
+}
+
+.come-back-message {
+  margin-top: 2rem;
+  color: var(--secondary-color);
+  font-style: italic;
+}
+
+@media (min-width: 576px) {
+  .input-group {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .input-group label {
+    margin-right: 1rem;
+    margin-bottom: 0;
+    width: 100px;
+  }
+  
+  .input-group input {
+    flex: 1;
+  }
 }

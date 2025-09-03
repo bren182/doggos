@@ -155,12 +155,20 @@ export const fetchBreedInfo = async (breedName) => {
         .replace('shepherd', 'german shepherd') // Special case for German Shepherd
         .replace('-', ' '); // Replace hyphens with spaces
       
-      const response = await fetch(`${BREED_INFO_URL}?name=${formattedBreed}`, {
+      // Log the breed being fetched
+      console.log(`Fetching breed info for: ${formattedBreed}`);
+      
+      // Make the API request
+      const response = await fetch(`${BREED_INFO_URL}?name=${encodeURIComponent(formattedBreed)}`, {
         headers: {
           'X-Api-Key': API_NINJAS_KEY,
           'Content-Type': 'application/json'
         }
       });
+      
+      if (response.status === 401 || response.status === 403) {
+        console.error('API key authentication failed - please check your API key');
+      }
       
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
